@@ -11,3 +11,14 @@ and has no dependencies.
 ```bash
 cli path.to.your.function --help
 ```
+
+For this to work, all you need to do is have a function in the module with the right type-annotations
+and all optional values should have a default value.
+
+    ```python
+    # Here model_name is required and data_path is optional
+    def train(
+            model_name: str, 
+            data_path: str = "./path/to/data"):
+        ...
+    ```
