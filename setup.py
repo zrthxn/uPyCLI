@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='upycli',
-    version='0.1.0',
+    version='0.2.0',
     packages=find_packages(),
     description='A microscopic library to turn any function into a CLI.',
     long_description=open('README.md', 'r').read(),
