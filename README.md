@@ -6,6 +6,9 @@ Takes some inspiration from [pycli](https://github.com/garenchan/pycli) although
 this existed before starting. This lib is even smaller than `pycli` and does not require any setup 
 and has no dependencies.
 
+The good thing about this is, you don't need to write or maintain any code for the CLI, all your types,
+variables, descriptions are introspected from the code itself, so all you do is throw on a decorator.
+
 ## Usage
 
 ```bash
@@ -30,17 +33,23 @@ Alternatively, the command decorator can be used to directly turn the function i
 from upycli.decorator import command
 
 @command
-def train(
-        model_name: str, 
-        data_path: str = "./path/to/data"):
+def train(model_name: str, data_path: str = "./path/to/data"):
+    """
+    A function to train a model
+    """
     ...
 ```
 ```bash
 python main.py train --help
 >>> usage: main.py [-h] --model_name MODEL_NAME [--data_path DATA_PATH]
 
+A function to train a model
+
 options:
   -h, --help               show this help message and exit
   --model_name MODEL_NAME  str
   --data_path DATA_PATH    str (default ./path/to/data)
 ```
+
+Your variables, types, required values and description are introspected from the code itself, 
+so all you do is throw on the decorator.
