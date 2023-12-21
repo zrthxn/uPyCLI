@@ -1,6 +1,6 @@
 import os
 from sys import argv
-from typing import Union
+from typing import Callable
 from argparse import ArgumentParser
 from importlib.util import spec_from_file_location, module_from_spec
 
@@ -43,7 +43,7 @@ using the `--help` flag.
 """
 
 
-def reflect(func):
+def reflect(func: Callable):
     annotations = func.__annotations__
     defaults = func.__defaults__
     
@@ -74,7 +74,7 @@ def reflect(func):
     return parser
 
 
-def run(target = None):
+def run(target: str | Callable = None):
     target = argv[1] if target is None else target
     
     if callable(target):
@@ -82,10 +82,6 @@ def run(target = None):
     elif '.' in target:
         path, name = target.rsplit('.', 1)
         target_path = os.path.abspath(os.path.curdir)
-        
-        # os.chdir(target_path)
-        # print(target_path)
-        # print(os.listdir())
         
         # specify the module that needs to be imported relative to the path of the module
         spec = spec_from_file_location(path, f"{target_path}/{path.replace('.', '/')}.py")
