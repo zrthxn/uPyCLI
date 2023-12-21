@@ -1,9 +1,10 @@
 from sys import argv 
+from typing import Callable
 
 from .runner import run
 
 
-def command(func):
+def command(func: Callable):
     """
     Command Decorator
     -----------------
@@ -16,8 +17,7 @@ def command(func):
         ```
     """
     
-    if argv[1] == func.__name__:
-        # print(func.__code__.co_varnames[:func.__code__.co_argcount])
-        # print(func.__defaults__)
+    if func.__name__ in argv:
         run(func)
-
+        
+    exit(0)
