@@ -1,6 +1,9 @@
+import os
 from sys import argv
 from argparse import ArgumentParser
+import importlib
 from importlib import import_module
+from importlib.util import spec_from_file_location, module_from_spec
 
 """
 Runner Module
@@ -40,22 +43,36 @@ using the `--help` flag.
     ```
 """
 
-MODULE = argv[1]
 
-if '.' in MODULE:
-    mname = MODULE.split('.')
-    module = import_module('.'.join(mname[:-1]))
-    func = getattr(module, mname[-1])
-else:
-    raise NotImplementedError
-    # func = REGISTRY[MODULE]
+def run():
+    MODULE = argv[1]
 
-annotations = func.__annotations__
-defaults = func.__defaults__
+    if '.' in MODULE:
+        path, name = MODULE.rsplit('.', 1)
+        # os.chdir(os.path.abspath(os.path.curdir))
+        
+        print(os.path.abspath(os.path.curdir))
+        print(os.listdir())
+        
+        # # specify the module that needs to be imported relative to the path of the module
+        # # creates a new module based on spec
+        # spec = spec_from_file_location(name, os.path.abspath(os.path.curdir) + '/' + '/'.join(path) + '.py')
+        # module = module_from_spec(spec)
+        
+        # # executes the module in its own namespace when a module is imported or reloaded.
+        # spec.loader.exec_module(module)
 
-parser = ArgumentParser(description = func.__doc__)
+        module = import_module(path)
+        func = getattr(module, name)
+    else:
+        raise NotImplementedError
+        # func = REGISTRY[MODULE]
 
-if __name__ == "__main__":
+    annotations = func.__annotations__
+    defaults = func.__defaults__
+
+    parser = ArgumentParser(description = func.__doc__)
+
     # Required args are the first arguments for which a default value
     # is not available. This will add those as required.
     required = list(annotations.items())[:len(annotations) - len(defaults)]
@@ -79,3 +96,7 @@ if __name__ == "__main__":
     
     args = parser.parse_args(argv[3:])
     func(**dict(args._get_kwargs()))
+
+
+if __name__ == "__main__":
+    run()
