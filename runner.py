@@ -1,5 +1,5 @@
 import os
-from sys import argv
+from sys import argv, modules
 from argparse import ArgumentParser
 import importlib
 from importlib import import_module
@@ -45,28 +45,27 @@ using the `--help` flag.
 
 
 def run():
-    MODULE = argv[1]
+    TARGET = argv[1]
 
-    if '.' in MODULE:
-        path, name = MODULE.rsplit('.', 1)
-        # os.chdir(os.path.abspath(os.path.curdir))
+    if '.' in TARGET:
+        path, name = TARGET.rsplit('.', 1)
+        target_path = os.path.abspath(os.path.curdir)
         
-        print(os.path.abspath(os.path.curdir))
+        # os.chdir(target_path)
+        print(target_path)
         print(os.listdir())
         
-        # # specify the module that needs to be imported relative to the path of the module
-        # # creates a new module based on spec
-        # spec = spec_from_file_location(name, os.path.abspath(os.path.curdir) + '/' + '/'.join(path) + '.py')
-        # module = module_from_spec(spec)
+        # specify the module that needs to be imported relative to the path of the module
+        spec = spec_from_file_location(path, f"{target_path}/{path.replace('.', '/')}.py")
+        module = module_from_spec(spec)
         
-        # # executes the module in its own namespace when a module is imported or reloaded.
-        # spec.loader.exec_module(module)
-
-        module = import_module(path)
+        # executes the module in its own namespace when a module is imported or reloaded.
+        spec.loader.exec_module(module)
+        
         func = getattr(module, name)
     else:
+        # We cant yet handle root level modules
         raise NotImplementedError
-        # func = REGISTRY[MODULE]
 
     annotations = func.__annotations__
     defaults = func.__defaults__
