@@ -12,7 +12,7 @@ variables, descriptions are introspected from the code itself, so all you do is 
 ## Usage
 
 ```bash
-cli path.to.your.function --help
+ucli path.to.your.function --help
 ```
 
 For this to work, all you need to do is have a function in the module with the right type-annotations

@@ -1,7 +1,7 @@
 from sys import argv 
 from typing import Callable
 
-from .runner import run
+from .runner import execute
 
 
 def command(func: Callable):
@@ -21,6 +21,6 @@ def command(func: Callable):
         print(f"Debug: Arguments `{argv}`")
         
     if func.__name__ in argv:
-        run(func)
+        execute(func, argv[(3 if argv == "python" else 2):])
         exit(0)
     

@@ -17,6 +17,6 @@ setup(
     
     # CLI
     entry_points = {
-        'console_scripts': ['ucli=upycli.runner:run'],
+        'console_scripts': ['ucli=upycli:ucli'],
     }
 )

@@ -1,5 +1,4 @@
 import os
-from sys import argv
 from typing import Callable
 from argparse import ArgumentParser
 from importlib.util import spec_from_file_location, module_from_spec
@@ -74,9 +73,7 @@ def reflect(func: Callable):
     return parser
 
 
-def run(target: str | Callable = None):
-    target = argv[1] if target is None else target
-    
+def execute(target: str | Callable, argv = []):
     if callable(target):
         func = target
     elif '.' in target:
@@ -101,7 +98,3 @@ def run(target: str | Callable = None):
     
     args = parser.parse_args(argv)
     func(**dict(args._get_kwargs()))
-
-
-if __name__ == "__main__":
-    run(argv[1])
