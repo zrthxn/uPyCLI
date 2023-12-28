@@ -17,12 +17,10 @@ def command(func: Callable):
         ```
     """
     
+    if "--upycli.debug" in argv:
+        print(f"Debug: Arguments `{argv}`")
+        
     if func.__name__ in argv:
         run(func)
         exit(0)
     
-    print(f"Warning: Function `{func.__name__}` not found")
-    if "--upycli.debug" in argv:
-        print(f"Debug: Arguments `{argv}`")
-        
-    exit(1)
