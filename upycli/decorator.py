@@ -24,3 +24,4 @@ def command(func: Callable):
         execute(func, argv[(3 if argv == "python" else 2):])
         exit(0)
     
+    return func
