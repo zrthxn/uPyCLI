@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='upycli',
-    version='0.2.5',
+    version='0.2.8',
     packages=find_packages(),
     
     # Descriptions

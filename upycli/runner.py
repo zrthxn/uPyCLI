@@ -1,5 +1,5 @@
 import os
-from typing import Callable
+from typing import Callable, Union
 from argparse import ArgumentParser
 from importlib.util import spec_from_file_location, module_from_spec
 
@@ -43,8 +43,8 @@ using the `--help` flag.
 
 
 def reflect(func: Callable):
-    annotations = func.__annotations__
-    defaults = func.__defaults__
+    annotations = func.__annotations__ or []
+    defaults = func.__defaults__ or []
     
     # Quickfix: If all args are optional, and so no type annotations, use code to inspect names 
     if len(annotations) == 0:
@@ -73,7 +73,7 @@ def reflect(func: Callable):
     return parser
 
 
-def execute(target: str | Callable, argv = []):
+def execute(target: Union[str, Callable], argv = []):
     if callable(target):
         func = target
     elif '.' in target:
