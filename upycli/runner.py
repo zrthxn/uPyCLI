@@ -43,8 +43,8 @@ using the `--help` flag.
 
 
 def reflect(func: Callable):
-    annotations = func.__annotations__
-    defaults = func.__defaults__
+    annotations = func.__annotations__ or []
+    defaults = func.__defaults__ or []
     
     # Quickfix: If all args are optional, and so no type annotations, use code to inspect names 
     if len(annotations) == 0:
