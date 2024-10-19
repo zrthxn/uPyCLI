@@ -3,6 +3,8 @@ from typing import Callable, Union
 from argparse import ArgumentParser
 from importlib.util import spec_from_file_location, module_from_spec
 
+from .types import resolve
+
 """
 Runner Module
 -------------
@@ -46,7 +48,7 @@ def reflect(func: Callable):
     annotations = func.__annotations__ or []
     defaults = func.__defaults__ or []
     
-    # Quickfix: If all args are optional, and so no type annotations, use code to inspect names 
+    # Quickfix: If all args are optional, so no type annotations, use code to inspect names 
     if len(annotations) == 0:
         annotations = {k: None for k in func.__code__.co_varnames[:func.__code__.co_argcount]}
 
@@ -56,19 +58,13 @@ def reflect(func: Callable):
     # is not available. This will add those as required.
     required = list(annotations.items())[:len(annotations) - len(defaults)]
     for aname, atype in required:
-        parser.add_argument(f"--{aname}", 
-                            type=atype, 
-                            help='%(type)s',
-                            required=True)
+        parser.add_argument(f"--{aname}", **resolve(atype))
 
     # Optional args are those for which a default value is available.
     optional = list(annotations.items())[len(annotations) - len(defaults):]
     for (aname, atype), dvalue in zip(optional, defaults):
         atype = type(dvalue) if atype is None else atype
-        parser.add_argument(f"--{aname}", 
-                            type=atype, 
-                            help='%(type)s (default %(default)s)',
-                            default=dvalue)
+        parser.add_argument(f"--{aname}", **resolve(atype, dvalue))
     
     return parser
 
